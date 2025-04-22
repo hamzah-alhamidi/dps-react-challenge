@@ -22,7 +22,11 @@ function App() {
 	const [nameFilter, setNameFilter] = useState('');
 	const [cityFilter, setCityFilter] = useState('');
 	const [uniqueCities, setUniqueCities] = useState<string[]>([]);
+	const [highlightOldest, setHighlightOldest] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
+	const [oldestPerCity, setOldestPerCity] = useState<Record<string, string>>(
+		{}
+	);
 
 	useEffect(() => {
 		const fetchUsers = async () => {
@@ -44,6 +48,28 @@ function App() {
 					...new Set(transformedData.map((user) => user.city)),
 				].sort();
 				setUniqueCities(cities);
+
+				// Calculate oldest person per city
+				const oldest: Record<string, string> = {};
+				cities.forEach((city) => {
+					const cityUsers = transformedData.filter(
+						(user) => user.city === city
+					);
+					let oldestUser = cityUsers[0];
+					cityUsers.forEach((user) => {
+						const oldestDate = new Date(
+							oldestUser.birthday.split('.').reverse().join('-')
+						);
+						const currentDate = new Date(
+							user.birthday.split('.').reverse().join('-')
+						);
+						if (currentDate < oldestDate) {
+							oldestUser = user;
+						}
+					});
+					oldest[city] = oldestUser.name;
+				});
+				setOldestPerCity(oldest);
 
 				setIsLoading(false);
 			} catch (error) {
@@ -84,6 +110,19 @@ function App() {
 		setCityFilter(e.target.value);
 	};
 
+	const handleHighlightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setHighlightOldest(e.target.checked);
+	};
+
+	// Function to determine if a person is the oldest in their city
+	const isOldest = (person: User) => {
+		// Only check if highlighting is turned on
+		if (!highlightOldest) return false;
+
+		// Find the oldest person in this city from the original dataset
+		return oldestPerCity[person.city] === person.name;
+	};
+
 	return (
 		<>
 			<div>
@@ -120,6 +159,20 @@ function App() {
 							))}
 						</select>
 					</div>
+					<div className="control-item checkbox-container">
+						<label
+							htmlFor="highlightOldest"
+							className="checkbox-label"
+						>
+							<input
+								type="checkbox"
+								id="highlightOldest"
+								checked={highlightOldest}
+								onChange={handleHighlightChange}
+							/>
+							Highlight oldest per city
+						</label>
+					</div>
 				</div>
 				<div className="data-table">
 					{isLoading ? (
@@ -135,7 +188,14 @@ function App() {
 							</thead>
 							<tbody>
 								{filteredData.map((person, index) => (
-									<tr key={index}>
+									<tr
+										key={index}
+										className={
+											isOldest(person)
+												? 'highlighted'
+												: ''
+										}
+									>
 										<td>{person.name}</td>
 										<td>{person.city}</td>
 										<td>{person.birthday}</td>

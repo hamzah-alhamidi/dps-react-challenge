@@ -77,26 +77,88 @@
 	border: 1px solid black !important;
 	border-radius: 0.5rem;
 	font-size: 1rem;
-	background-color: white !important; 
+	background-color: white !important;
 	color: black !important;
 	outline: none;
 }
 
 .city-dropdown {
-    width: 150%;
-    padding: 0.5rem;
-    border: 1px solid black !important;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    background-color: white !important;
-    color: rgb(105, 101, 101) !important;
-    outline: none;
-    cursor: pointer;
+	width: 150%;
+	padding: 0.5rem;
+	border: 1px solid black !important;
+	border-radius: 0.5rem;
+	font-size: 1rem;
+	background-color: white !important;
+	color: rgb(105, 101, 101) !important;
+	outline: none;
+	cursor: pointer;
 }
 
 .city-dropdown option {
-    background-color: white;
-    color: black;
+	background-color: white;
+	color: black;
+}
+
+.checkbox-container {
+	display: flex;
+	align-items: center;
+	margin-left: auto; /* Push to the right side */
+}
+
+.checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.checkbox-label input[type='checkbox'] {
+	width: 1.2rem;
+	height: 1.2rem;
+	cursor: pointer;
+}
+
+/* Highlighted row styling - single element with rounded corners */
+.highlighted {
+	border: #0981d7 1px solid;
+	border-radius: 0.5rem;
+	box-shadow: 0 2px 4px rgba(9, 129, 215, 0.2);
+	overflow: hidden; /* Ensure content doesn't break radius */
+	margin-bottom: 0.5rem !important;
+	margin-left: 0.5rem !important; /* Add left padding */
+	margin-right: 0.5rem !important; /* Add right padding */
+	width: calc(
+		100% - 1rem
+	) !important; /* Adjust width to account for margins */
+	position: relative; /* For positioning pseudo-elements if needed */
+	display: table !important; /* Override any display settings */
+}
+
+/* Ensure highlighted cells also have no border-radius */
+.highlighted td {
+	background-color: #d1ecff !important; /* Baby-blue color */
+	font-weight: bold;
+	border: none !important; /* Remove all borders between cells */
+	padding: 1rem;
+	border-radius: 0 !important; /* Force no border-radius on cells */
+}
+
+/* Remove individual cell border radius */
+.highlighted td:first-child {
+	border-radius: 0;
+}
+
+.highlighted td:last-child {
+	border-radius: 0;
+}
+
+/* Override display table settings that might interfere */
+.data-table tbody tr.highlighted {
+	display: table !important;
+	width: calc(100% - 1rem) !important;
+	margin-left: 0.5rem !important;
+	margin-right: 0.5rem !important;
 }
 
 .data-table {
@@ -111,11 +173,12 @@
 	overflow: hidden; /* Added to ensure content respects the border radius */
 }
 
+/* Adjust table layout to fix border-collapse issues */
 .data-table table {
 	width: 100%;
-	border-collapse: collapse;
-	table-layout: fixed;
+	border-collapse: separate;
 	border-spacing: 0;
+	table-layout: fixed;
 }
 
 .data-table thead {
@@ -143,7 +206,6 @@
 /* row height settin */
 .data-table tbody {
 	display: block;
-	padding: 0%;
 	height: auto;
 	max-height: calc(
 		5 * 4.5rem
@@ -193,14 +255,42 @@
 	table-layout: fixed;
 }
 
+/* Add some spacing between rows */
+.data-table tbody tr {
+	display: table;
+	width: 100%;
+	table-layout: fixed;
+	margin-bottom: 0.5rem;
+}
+
+/* Update the table row styling */
+.data-table tr {
+	margin: 0.5rem 0;
+}
+
+/* Remove border-radius from all regular table cells */
 .data-table td {
 	padding: 1rem;
 	padding-left: 2em;
-	padding-top: 2rem;
 	text-align: left;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	border-radius: 0; /* Remove border-radius from all cells */
+	transition: all 0.2s ease-in-out;
+}
+
+/* Fix for conflicting display rules */
+.data-table thead tr,
+.data-table tbody tr {
+	display: table;
+	width: 100%;
+	table-layout: fixed;
+}
+
+/* Prevent duplicate rules */
+.data-table tbody tr {
+	margin-bottom: 0.5rem;
 }
 
 /* Scrollbar styling for Webkit browsers */
