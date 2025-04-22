@@ -82,7 +82,22 @@
 	outline: none;
 }
 
+.city-dropdown {
+    width: 150%;
+    padding: 0.5rem;
+    border: 1px solid black !important;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: white !important;
+    color: rgb(105, 101, 101) !important;
+    outline: none;
+    cursor: pointer;
+}
 
+.city-dropdown option {
+    background-color: white;
+    color: black;
+}
 
 .data-table {
 	flex: 2;

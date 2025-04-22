@@ -20,6 +20,8 @@ function App() {
 	const [userData, setUserData] = useState<User[]>([]);
 	const [filteredData, setFilteredData] = useState<User[]>([]);
 	const [nameFilter, setNameFilter] = useState('');
+	const [cityFilter, setCityFilter] = useState('');
+	const [uniqueCities, setUniqueCities] = useState<string[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
@@ -36,6 +38,13 @@ function App() {
 
 				setUserData(transformedData);
 				setFilteredData(transformedData);
+
+				// Extract unique cities
+				const cities = [
+					...new Set(transformedData.map((user) => user.city)),
+				].sort();
+				setUniqueCities(cities);
+
 				setIsLoading(false);
 			} catch (error) {
 				console.error('Error fetching users:', error);
@@ -46,16 +55,33 @@ function App() {
 		fetchUsers();
 	}, []);
 
-	// Filter data when nameFilter changes
+	// Filter data when nameFilter or cityFilter changes
 	useEffect(() => {
-		const filtered = userData.filter((user) =>
-			user.name.toLowerCase().includes(nameFilter.toLowerCase())
-		);
+		let filtered = userData;
+
+		// Apply name filter
+		if (nameFilter) {
+			filtered = filtered.filter((user) =>
+				user.name.toLowerCase().includes(nameFilter.toLowerCase())
+			);
+		}
+
+		// Apply city filter
+		if (cityFilter) {
+			filtered = filtered.filter((user) => user.city === cityFilter);
+		}
+
 		setFilteredData(filtered);
-	}, [nameFilter, userData]);
+	}, [nameFilter, cityFilter, userData]);
 
 	const handleNameFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setNameFilter(e.target.value);
+	};
+
+	const handleCityFilterChange = (
+		e: React.ChangeEvent<HTMLSelectElement>
+	) => {
+		setCityFilter(e.target.value);
 	};
 
 	return (
@@ -77,6 +103,22 @@ function App() {
 							value={nameFilter}
 							onChange={handleNameFilterChange}
 						/>
+					</div>
+					<div className="control-item">
+						<label htmlFor="cityFilter">City</label>
+						<select
+							id="cityFilter"
+							className="city-dropdown"
+							value={cityFilter}
+							onChange={handleCityFilterChange}
+						>
+							<option value="">Select city</option>
+							{uniqueCities.map((city) => (
+								<option key={city} value={city}>
+									{city}
+								</option>
+							))}
+						</select>
 					</div>
 				</div>
 				<div className="data-table">
