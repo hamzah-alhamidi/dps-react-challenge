@@ -203,8 +203,7 @@
 	border: 1px solid black;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	min-height: calc(70% - 1rem); /* 2/3 of space minus half the gap */
-	overflow-x: hidden; /* Prevent horizontal scrolling */
-	overflow-y: hidden; /* Let the tbody handle vertical scrolling */
+	overflow: hidden; /* Prevent both horizontal and vertical scrolling */
 }
 
 /* Adjust table layout to fix border-collapse issues */
