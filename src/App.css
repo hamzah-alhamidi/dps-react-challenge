@@ -60,16 +60,127 @@
 	border-radius: 1rem;
 	padding: 1.5rem;
 	border: 1px solid black;
-	min-height: calc(18% - 1rem); 
+	min-height: calc(10% - 1rem);
 }
 
 .data-table {
 	flex: 2;
+	display: flex;
+	flex-direction: column;
 	background-color: #ffffff;
 	border-radius: 1rem;
-	padding: 1.5rem;
 	border: 1px solid black;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	min-height: calc(66.67% - 1rem); /* 2/3 of space minus half the gap */
+	min-height: calc(85% - 1rem); /* 2/3 of space minus half the gap */
+	overflow: hidden; /* Added to ensure content respects the border radius */
 }
 
+.data-table table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+	border-spacing: 0;
+}
+
+.data-table thead {
+	background-color: #ffffff;
+	border-bottom: none;
+}
+
+/* The heading */
+.data-table th {
+	padding: 1em;
+	padding-left: 2em;
+	text-align: left;
+	font-weight: 600;
+	border-bottom: 2px solid #000000;
+	position: sticky;
+	top: 0;
+	background-color: #ffffff;
+	z-index: 1;
+	margin-bottom: -2px; /* This helps merge the border visually */
+}
+
+.data-table tbody tr:first-child td {
+	padding-top: calc(1rem + 15px); /* Add the border width to the padding */
+}
+/* row height settin */
+.data-table tbody {
+	display: block;
+	padding: 0%;
+	height: auto;
+	max-height: calc(
+		5 * 4.5rem
+	); /* Increased from 3.75rem to 4.5rem to accommodate padding */
+	overflow-y: auto;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+/* Hide scrollbar  */
+.data-table tbody::-webkit-scrollbar {
+	width: 0;
+	background: transparent;
+	opacity: 0;
+	transition: all 0.3s ease;
+}
+
+/* Show scrollbar on hover  */
+.data-table tbody:hover::-webkit-scrollbar {
+	width: 6px;
+	opacity: 1;
+}
+
+.data-table tbody:hover {
+	scrollbar-width: thin; /* Firefox */
+}
+
+.data-table tbody::-webkit-scrollbar-track {
+	background: transparent;
+	border-radius: 3px;
+}
+
+.data-table tbody::-webkit-scrollbar-thumb {
+	background: rgba(136, 136, 136, 0.5);
+	border-radius: 3px;
+	transition: background 0.3s ease;
+}
+
+.data-table tbody::-webkit-scrollbar-thumb:hover {
+	background: rgba(85, 85, 85, 0.8);
+}
+
+.data-table thead tr,
+.data-table tbody tr {
+	display: table;
+	width: 100%;
+	table-layout: fixed;
+}
+
+.data-table td {
+	padding: 1rem;
+	padding-left: 2em;
+	padding-top: 2rem;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Scrollbar styling for Webkit browsers */
+.data-table tbody::-webkit-scrollbar {
+	width: 6px;
+}
+
+.data-table tbody::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+.data-table tbody::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 3px;
+}
+
+.data-table tbody::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
