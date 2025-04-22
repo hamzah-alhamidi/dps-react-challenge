@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import dpsLogo from './assets/DPS.svg';
 import './App.css';
 
@@ -53,12 +53,14 @@ function App() {
 
 				// Calculate oldest person per city
 				const oldest: Record<string, string> = {};
+
 				cities.forEach((city) => {
 					const cityUsers = transformedData.filter(
 						(user) => user.city === city
 					);
 					let oldestUser = cityUsers[0];
-					cityUsers.forEach((user) => {
+
+					for (const user of cityUsers) {
 						const oldestDate = new Date(
 							oldestUser.birthday.split('.').reverse().join('-')
 						);
@@ -68,11 +70,12 @@ function App() {
 						if (currentDate < oldestDate) {
 							oldestUser = user;
 						}
-					});
+					}
+
 					oldest[city] = oldestUser.name;
 				});
-				setOldestPerCity(oldest);
 
+				setOldestPerCity(oldest);
 				setIsLoading(false);
 			} catch (error) {
 				console.error('Error fetching users:', error);
@@ -87,17 +90,15 @@ function App() {
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			setDebouncedNameFilter(nameFilter);
-		}, 1000); // 1 second delay
+		}, 1000);
 
-		// Clean up the timer on each nameFilter change
 		return () => clearTimeout(timer);
 	}, [nameFilter]);
 
-	// Filter data when debouncedNameFilter or cityFilter changes
+	// Filter data when filters change
 	useEffect(() => {
 		let filtered = userData;
 
-		// Apply name filter
 		if (debouncedNameFilter) {
 			filtered = filtered.filter((user) =>
 				user.name
@@ -106,7 +107,6 @@ function App() {
 			);
 		}
 
-		// Apply city filter
 		if (cityFilter) {
 			filtered = filtered.filter((user) => user.city === cityFilter);
 		}
@@ -114,28 +114,9 @@ function App() {
 		setFilteredData(filtered);
 	}, [debouncedNameFilter, cityFilter, userData]);
 
-	const handleNameFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setNameFilter(e.target.value);
-	};
-
-	const handleCityFilterChange = (
-		e: React.ChangeEvent<HTMLSelectElement>
-	) => {
-		setCityFilter(e.target.value);
-	};
-
-	const handleHighlightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setHighlightOldest(e.target.checked);
-	};
-
 	// Function to determine if a person is the oldest in their city
-	const isOldest = (person: User) => {
-		// Only check if highlighting is turned on
-		if (!highlightOldest) return false;
-
-		// Find the oldest person in this city from the original dataset
-		return oldestPerCity[person.city] === person.name;
-	};
+	const isOldest = (person: User) =>
+		highlightOldest && oldestPerCity[person.city] === person.name;
 
 	return (
 		<>
@@ -154,7 +135,7 @@ function App() {
 							placeholder="Search by name"
 							className="name-input"
 							value={nameFilter}
-							onChange={handleNameFilterChange}
+							onChange={(e) => setNameFilter(e.target.value)}
 						/>
 					</div>
 					<div className="control-item">
@@ -163,7 +144,7 @@ function App() {
 							id="cityFilter"
 							className="city-dropdown"
 							value={cityFilter}
-							onChange={handleCityFilterChange}
+							onChange={(e) => setCityFilter(e.target.value)}
 						>
 							<option value="">Select city</option>
 							{uniqueCities.map((city) => (
@@ -182,7 +163,9 @@ function App() {
 								type="checkbox"
 								id="highlightOldest"
 								checked={highlightOldest}
-								onChange={handleHighlightChange}
+								onChange={(e) =>
+									setHighlightOldest(e.target.checked)
+								}
 							/>
 							<span
 								style={{ textAlign: 'left', display: 'block' }}
