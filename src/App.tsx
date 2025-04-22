@@ -18,6 +18,8 @@ function formatDate(dateString: string): string {
 
 function App() {
 	const [userData, setUserData] = useState<User[]>([]);
+	const [filteredData, setFilteredData] = useState<User[]>([]);
+	const [nameFilter, setNameFilter] = useState('');
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
@@ -33,6 +35,7 @@ function App() {
 				}));
 
 				setUserData(transformedData);
+				setFilteredData(transformedData);
 				setIsLoading(false);
 			} catch (error) {
 				console.error('Error fetching users:', error);
@@ -43,6 +46,18 @@ function App() {
 		fetchUsers();
 	}, []);
 
+	// Filter data when nameFilter changes
+	useEffect(() => {
+		const filtered = userData.filter((user) =>
+			user.name.toLowerCase().includes(nameFilter.toLowerCase())
+		);
+		setFilteredData(filtered);
+	}, [nameFilter, userData]);
+
+	const handleNameFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setNameFilter(e.target.value);
+	};
+
 	return (
 		<>
 			<div>
@@ -52,7 +67,17 @@ function App() {
 			</div>
 			<div className="home-card">
 				<div className="control-panel">
-					{/* Control panel content will go here */}
+					<div className="control-item">
+						<label htmlFor="nameFilter">Name</label>
+						<input
+							type="text"
+							id="nameFilter"
+							placeholder="Search by name"
+							className="name-input"
+							value={nameFilter}
+							onChange={handleNameFilterChange}
+						/>
+					</div>
 				</div>
 				<div className="data-table">
 					{isLoading ? (
@@ -67,7 +92,7 @@ function App() {
 								</tr>
 							</thead>
 							<tbody>
-								{userData.map((person, index) => (
+								{filteredData.map((person, index) => (
 									<tr key={index}>
 										<td>{person.name}</td>
 										<td>{person.city}</td>
