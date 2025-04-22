@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import dpsLogo from './assets/DPS.svg';
 import './App.css';
 
@@ -20,6 +20,7 @@ function App() {
 	const [userData, setUserData] = useState<User[]>([]);
 	const [filteredData, setFilteredData] = useState<User[]>([]);
 	const [nameFilter, setNameFilter] = useState('');
+	const [debouncedNameFilter, setDebouncedNameFilter] = useState('');
 	const [cityFilter, setCityFilter] = useState('');
 	const [uniqueCities, setUniqueCities] = useState<string[]>([]);
 	const [highlightOldest, setHighlightOldest] = useState(false);
@@ -28,6 +29,7 @@ function App() {
 		{}
 	);
 
+	// Fetch users on initial load
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
@@ -81,14 +83,26 @@ function App() {
 		fetchUsers();
 	}, []);
 
-	// Filter data when nameFilter or cityFilter changes
+	// Debounce the name filter
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setDebouncedNameFilter(nameFilter);
+		}, 1000); // 1 second delay
+
+		// Clean up the timer on each nameFilter change
+		return () => clearTimeout(timer);
+	}, [nameFilter]);
+
+	// Filter data when debouncedNameFilter or cityFilter changes
 	useEffect(() => {
 		let filtered = userData;
 
 		// Apply name filter
-		if (nameFilter) {
+		if (debouncedNameFilter) {
 			filtered = filtered.filter((user) =>
-				user.name.toLowerCase().includes(nameFilter.toLowerCase())
+				user.name
+					.toLowerCase()
+					.includes(debouncedNameFilter.toLowerCase())
 			);
 		}
 
@@ -98,7 +112,7 @@ function App() {
 		}
 
 		setFilteredData(filtered);
-	}, [nameFilter, cityFilter, userData]);
+	}, [debouncedNameFilter, cityFilter, userData]);
 
 	const handleNameFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setNameFilter(e.target.value);
