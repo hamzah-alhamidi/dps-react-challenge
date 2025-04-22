@@ -1,12 +1,40 @@
+import { useState, useEffect } from 'react';
 import dpsLogo from './assets/DPS.svg';
 import './App.css';
 
+interface User {
+	name: string;
+	city: string;
+	birthday: string;
+}
+
 function App() {
-	const sampleData = [
-		{ name: 'Alotta Fudge', city: 'New York', birthday: '1.3.1995' },
-		{ name: 'John Doe', city: 'London', birthday: '15.6.1990' },
-		{ name: 'Jane Smith', city: 'Paris', birthday: '22.8.1988' },
-	];
+	const [userData, setUserData] = useState<User[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchUsers = async () => {
+			try {
+				const response = await fetch('https://dummyjson.com/users');
+				const data = await response.json();
+
+				const transformedData = data.users.map((user: any) => ({
+					name: `${user.firstName} ${user.lastName}`,
+					city: user.address.city,
+					birthday: user.birthDate,
+				}));
+
+				setUserData(transformedData);
+				setIsLoading(false);
+			} catch (error) {
+				console.error('Error fetching users:', error);
+				setIsLoading(false);
+			}
+		};
+
+		fetchUsers();
+	}, []);
+
 	return (
 		<>
 			<div>
@@ -19,24 +47,28 @@ function App() {
 					{/* Control panel content will go here */}
 				</div>
 				<div className="data-table">
-					<table>
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>City</th>
-								<th>Birthday</th>
-							</tr>
-						</thead>
-						<tbody>
-							{sampleData.map((person, index) => (
-								<tr key={index}>
-									<td>{person.name}</td>
-									<td>{person.city}</td>
-									<td>{person.birthday}</td>
+					{isLoading ? (
+						<p>Loading data...</p>
+					) : (
+						<table>
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>City</th>
+									<th>Birthday</th>
 								</tr>
-							))}
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								{userData.map((person, index) => (
+									<tr key={index}>
+										<td>{person.name}</td>
+										<td>{person.city}</td>
+										<td>{person.birthday}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					)}
 				</div>
 			</div>
 		</>
