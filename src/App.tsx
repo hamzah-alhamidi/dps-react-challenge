@@ -8,6 +8,14 @@ interface User {
 	birthday: string;
 }
 
+function formatDate(dateString: string): string {
+	const date = new Date(dateString);
+	const day = date.getDate().toString().padStart(2, '0');
+	const month = (date.getMonth() + 1).toString().padStart(2, '0');
+	const year = date.getFullYear();
+	return `${day}.${month}.${year}`;
+}
+
 function App() {
 	const [userData, setUserData] = useState<User[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +29,7 @@ function App() {
 				const transformedData = data.users.map((user: any) => ({
 					name: `${user.firstName} ${user.lastName}`,
 					city: user.address.city,
-					birthday: user.birthDate,
+					birthday: formatDate(user.birthDate),
 				}));
 
 				setUserData(transformedData);
