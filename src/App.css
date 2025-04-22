@@ -56,7 +56,7 @@
 
 .control-panel {
 	display: flex;
-	align-items: flex-end;
+	align-items: flex-end; /* This ensures bottom alignment of all items */
 	padding: 1rem;
 	gap: 1rem;
 	min-height: calc(10% - 1rem);
@@ -66,6 +66,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+	justify-content: flex-end; /* Align contents to bottom */
 }
 
 .control-item label {
@@ -83,7 +84,7 @@
 }
 
 .city-dropdown {
-	width: 150%;
+	width: 200%;
 	padding: 0.5rem;
 	border: 1px solid black !important;
 	border-radius: 0.5rem;
@@ -101,22 +102,40 @@
 
 .checkbox-container {
 	display: flex;
-	align-items: center;
+	align-items: center; /* Change from flex-end to center for better alignment */
 	margin-left: auto; /* Push to the right side */
+	height: 100%;
+	padding-bottom: 0.5rem; /* Add padding to match other inputs */
+	align-self: flex-end; /* Align with bottom of the form layout */
 }
 
 .checkbox-label {
 	display: flex;
+	flex-direction: row-reverse; /* Move label to the left of checkbox */
 	align-items: center;
 	gap: 0.5rem;
 	cursor: pointer;
 	font-weight: 500;
+	padding-bottom: 0.5rem; /* Match the input padding */
+}
+
+/* Add this new style for the label text content */
+.checkbox-label span {
+	display: inline-block;
+	text-align: right;
+	line-height: 1.2;
+	vertical-align: middle; /* Align text with checkbox */
 }
 
 .checkbox-label input[type='checkbox'] {
-	width: 1.2rem;
-	height: 1.2rem;
+	width: 3rem; /* More reasonable size */
+	height: 3rem;
 	cursor: pointer;
+	margin-top: 0; /* Remove default browser margin */
+	margin-bottom: 0; /* Remove default browser margin */
+	vertical-align: middle; /* Better alignment with text */
+	position: relative;
+	top: 10px; /* Fine-tune vertical alignment */
 }
 
 /* Highlighted row styling - single element with rounded corners */

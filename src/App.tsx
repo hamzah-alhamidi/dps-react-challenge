@@ -170,7 +170,13 @@ function App() {
 								checked={highlightOldest}
 								onChange={handleHighlightChange}
 							/>
-							Highlight oldest per city
+							<span
+								style={{ textAlign: 'left', display: 'block' }}
+							>
+								Highlight oldest
+								<br />
+								per city
+							</span>
 						</label>
 					</div>
 				</div>
