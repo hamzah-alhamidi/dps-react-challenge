@@ -37,12 +37,38 @@
 	padding: 2em;
 }
 
+.read-the-docs {
+	color: #888;
+}
+
 .home-card {
 	display: flex;
 	flex-direction: column;
-	gap: 0.5rem;
+	gap: 2rem;
+	padding: 2rem;
+	width: 800px;
+	max-width: 1000px;
+	height: 600px;
+	margin: 2rem auto;
+	border: 1px solid black;
+	border-radius: 1rem;
 }
 
-.read-the-docs {
-	color: #888;
+.control-panel {
+	flex: 1;
+	background-color: #ffffff;
+	border-radius: 1rem;
+	padding: 1.5rem;
+	border: 1px solid black;
+	min-height: calc(18% - 1rem); 
+}
+
+.data-table {
+	flex: 2;
+	background-color: #ffffff;
+	border-radius: 1rem;
+	padding: 1.5rem;
+	border: 1px solid black;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	min-height: calc(66.67% - 1rem); /* 2/3 of space minus half the gap */
 }

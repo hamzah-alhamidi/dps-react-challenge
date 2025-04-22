@@ -10,7 +10,12 @@ function App() {
 				</a>
 			</div>
 			<div className="home-card">
-				<p>Your solution goes here 😊</p>
+				<div className="control-panel">
+					{/* Control panel content will go here */}
+				</div>
+				<div className="data-table">
+					{/* Data table content will go here */}
+				</div>
 			</div>
 		</>
 	);
