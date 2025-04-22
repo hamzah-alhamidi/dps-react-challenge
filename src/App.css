@@ -93,6 +93,19 @@
 	color: rgb(105, 101, 101) !important;
 	outline: none;
 	cursor: pointer;
+	appearance: none; /* Remove default dropdown arrow in most browsers */
+	-webkit-appearance: none; /* For Safari */
+	-moz-appearance: none; /* For Firefox */
+	background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+	background-repeat: no-repeat;
+	background-position: right 0.5rem center;
+	background-size: 1.5rem;
+	padding-right: 2rem; /* Make room for the arrow */
+}
+
+/* Remove default arrow in IE */
+.city-dropdown::-ms-expand {
+	display: none;
 }
 
 .city-dropdown option {
@@ -180,6 +193,7 @@
 	margin-right: 0.5rem !important;
 }
 
+/* Prevent horizontal scrolling in the table */
 .data-table {
 	flex: 2;
 	display: flex;
@@ -189,7 +203,8 @@
 	border: 1px solid black;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	min-height: calc(70% - 1rem); /* 2/3 of space minus half the gap */
-	overflow: hidden; /* Added to ensure content respects the border radius */
+	overflow-x: hidden; /* Prevent horizontal scrolling */
+	overflow-y: hidden; /* Let the tbody handle vertical scrolling */
 }
 
 /* Adjust table layout to fix border-collapse issues */
@@ -197,12 +212,7 @@
 	width: 100%;
 	border-collapse: separate;
 	border-spacing: 0;
-	table-layout: fixed;
-}
-
-.data-table thead {
-	background-color: #ffffff;
-	border-bottom: none;
+	table-layout: fixed; /* Ensure fixed table layout */
 }
 
 /* The heading */
@@ -219,6 +229,14 @@
 	margin-bottom: -2px; /* This helps merge the border visually */
 }
 
+/* Ensure table cells don't expand beyond their allocated width */
+.data-table th,
+.data-table td {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .data-table tbody tr:first-child td {
 	padding-top: calc(1rem + 15px); /* Add the border width to the padding */
 }
@@ -230,6 +248,7 @@
 		5 * 4.5rem
 	); /* Increased from 3.75rem to 4.5rem to accommodate padding */
 	overflow-y: auto;
+	overflow-x: hidden;
 	scrollbar-width: none;
 	-ms-overflow-style: none;
 }
