@@ -26,7 +26,7 @@ Refer to the attached mockup image to guide your UI development 👇
 
 ## Results
 
-![Results](images/Results.png)
+![Results](images/Results2.png)
 
 \
 Happy coding!
